@@ -1,3 +1,4 @@
+import Enteties.User;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -9,20 +10,25 @@ public class Main {
     public static void main(String[] args) {
         EntityManager em = JPAUtil.getEntityManager();
 
-        System.out.print("Enter search term: ");
+        // add users
+        inTransaction((entityManager) -> {
+            entityManager.persist(new User("Martin"));
+        });
+
+/*        System.out.print("Enter search term: ");
         Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
+        String name = scanner.nextLine();*/
 
         // Validate user input
-        if (name == null || name.isEmpty()) {
+/*        if (name == null || name.isEmpty()) {
             System.out.println("Invalid input.");
             return;
-        }
+        }*/
 
-        TypedQuery<Country> query = em.createQuery("SELECT c FROM Country c WHERE c.countryName = :name", Country.class);
+/*        TypedQuery<Country> query = em.createQuery("SELECT c FROM Country c WHERE c.countryName = :name", Country.class);
         query.setParameter("name", name);
         List<Country> countries = query.getResultList();
-        countries.forEach(System.out::println);
+        countries.forEach(System.out::println);*/
 
         em.close();
     }
