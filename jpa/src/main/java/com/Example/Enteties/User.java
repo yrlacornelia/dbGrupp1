@@ -1,4 +1,4 @@
-package Enteties;
+package com.Example.Enteties;
 
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
