@@ -2,11 +2,13 @@ package com.Example.dtos;
 
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
+import com.Example.Menu;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class UserDto {
@@ -50,6 +52,7 @@ public class UserDto {
                 if (user != null){
                     System.out.println("Välkommen " + user.getName());
                 } else{
+                    // skapa ny användare
                     System.out.println("Vi kunde inte hitta dig");
                     System.out.println("Vänligen ange ditt namn:");
                 }
@@ -59,7 +62,26 @@ public class UserDto {
             System.out.println("Du måste välja alternativ 1 eller 2");
         }
     }
-    
+
+    public static int getStudent(Integer userId){
+        User user = null;
+        inTransaction(entityManager -> {
+            User user = entityManager.find(User.class, userId);
+
+        });
+        if (user != null){
+                System.out.println("Välkommen " + user.getName());
+               return user.getId();
+            } else{
+                // skapa ny användare
+                System.out.println("Vi kunde inte hitta dig");
+                System.out.println("Vänligen ange ditt namn:");
+                return 0;
+            }
+
+    }
+
+
     public static void getAllStudents(){
         inTransaction((entityManager) -> {
             String queryString = """

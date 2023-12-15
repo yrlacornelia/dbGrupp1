@@ -11,32 +11,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // add users
-            while (true) {
-                EntityManager em = JPAUtil.getEntityManager();
-                System.out.println("Välj ett alternativ");
-                System.out.println("1: Lägg till student");
-                System.out.println("2: Visa student");
-                System.out.println("3: Ta bort student");
-                System.out.println("4: Visa alla studenter");
-                System.out.println("5: Uppdatera en student");
-                String userSelection = sc.nextLine();
-                if (userSelection.equals("1"))
-                    UserDto.addNewStudent();
-                if (userSelection.equals("2"))
-                    UserDto.showStudent();
-                if (userSelection.equals("3"))
-                    UserDto.removeStudent();
-                if(userSelection.equals("4"))
-                    UserDto.getAllStudents();
-                if(userSelection.equals("5"))
-                    UserDto.updateStudent();
-                em.close();
-            }
+        //Första meny
+        System.out.println("Välj vilken skola du går på");
 
-
-
-
+        Menu.secondMenu();
 
 /*        System.out.print("Enter search term: ");
         Scanner scanner = new Scanner(System.in);
@@ -54,7 +32,7 @@ public class Main {
         countries.forEach(System.out::println);*/
 
 
+
     }
-
-
 }
+
