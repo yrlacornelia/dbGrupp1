@@ -2,13 +2,12 @@ package com.Example.dtos;
 
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
-import com.Example.Menu;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class UserDto {
@@ -63,22 +62,15 @@ public class UserDto {
         }
     }
 
-    public static int getStudent(Integer userId){
-        User user = null;
+
+    public static User getStudent(Integer userId) {
+        AtomicReference<User> user = new AtomicReference<>(null);
+
         inTransaction(entityManager -> {
-            User user = entityManager.find(User.class, userId);
-
+            user.set(entityManager.find(User.class, userId));
         });
-        if (user != null){
-                System.out.println("Välkommen " + user.getName());
-               return user.getId();
-            } else{
-                // skapa ny användare
-                System.out.println("Vi kunde inte hitta dig");
-                System.out.println("Vänligen ange ditt namn:");
-                return 0;
-            }
 
+        return user.get();
     }
 
 

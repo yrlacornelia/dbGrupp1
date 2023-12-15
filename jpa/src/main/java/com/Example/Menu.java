@@ -1,5 +1,6 @@
 package com.Example;
 
+import com.Example.Enteties.User;
 import com.Example.dtos.UserDto;
 import jakarta.persistence.EntityManager;
 
@@ -50,14 +51,15 @@ public class Menu {
 
     public static void loginMenu(){
         EntityManager em = JPAUtil.getEntityManager();
-
         System.out.println("Ange ditt studentid");
-        Integer user = Integer.valueOf(sc.nextLine());
-        int id = UserDto.getStudent(user);
-
+        Integer userId = Integer.valueOf(sc.nextLine());
+        User user = UserDto.getStudent(userId);
+        if (user != null) {
+            System.out.println("Inloggad som: " + user.getName());
+        } else {
+            System.out.println("Inloggningen misslyckades");
+        }
     }
-
-
 }
 
 
