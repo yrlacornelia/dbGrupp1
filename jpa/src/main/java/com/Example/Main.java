@@ -12,7 +12,6 @@ public class Main {
     public static void main(String[] args) {
 
         //Första meny
-        System.out.println("Välj vilken skola du går på");
 
         Menu.secondMenu();
 

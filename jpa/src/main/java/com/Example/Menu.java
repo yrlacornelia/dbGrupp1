@@ -1,6 +1,7 @@
 package com.Example;
 
 import com.Example.Enteties.User;
+import com.Example.dtos.StudyDto;
 import com.Example.dtos.UserDto;
 import jakarta.persistence.EntityManager;
 
@@ -11,6 +12,7 @@ public class Menu {
     public static Scanner sc = new Scanner(System.in);
 
     public static void secondMenu() {
+        System.out.println("Välj ett alternativ:");
         while (true) {
             System.out.println("1. Logga in");
             System.out.println("2. Gå till adminsidan");
@@ -28,12 +30,13 @@ public class Menu {
     public static void adminMenu() {
         while (true) {
             EntityManager em = JPAUtil.getEntityManager();
-            System.out.println("Välj ett alternativ");
+            System.out.println("Välj ett alternativ:");
             System.out.println("1: Lägg till student");
             System.out.println("2: Visa student");
             System.out.println("3: Ta bort student");
             System.out.println("4: Visa alla studenter");
             System.out.println("5: Uppdatera en student");
+            System.out.println("6: Gå tillbaka till föregående meny");
             String userSelection = sc.nextLine();
             if (userSelection.equals("1"))
                 UserDto.addNewStudent();
@@ -45,6 +48,8 @@ public class Menu {
                 UserDto.getAllStudents();
             if (userSelection.equals("5"))
                 UserDto.updateStudent();
+            if (userSelection.equals("6"))
+                Menu.secondMenu();
             em.close();
         }
     }
@@ -56,9 +61,30 @@ public class Menu {
         User user = UserDto.getStudent(userId);
         if (user != null) {
             System.out.println("Inloggad som: " + user.getName());
+            thirdMenu(user);
         } else {
             System.out.println("Inloggningen misslyckades");
         }
+    }
+
+    public static void thirdMenu(User user){
+        System.out.println(user.getName());
+        System.out.println("1. Se ditt highscore");
+        System.out.println("2. Öva på glosor");
+        String userSelection = sc.nextLine();
+        if(userSelection.equals("1"))
+            highscoreMenu();
+        if(userSelection.equals("2"))
+            studyMenu(user);
+    }
+
+    private static void highscoreMenu() {
+        System.out.println("highscore:");
+    }
+
+    private static void studyMenu(User user) {
+        StudyDto.getEnglishQuestions(user);
+
     }
 }
 
