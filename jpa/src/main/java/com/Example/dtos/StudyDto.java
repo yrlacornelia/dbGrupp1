@@ -1,6 +1,8 @@
 package com.Example.dtos;
 
+import com.Example.Enteties.Score;
 import com.Example.Enteties.StudyQuestion;
+import com.Example.Enteties.Subject;
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
@@ -19,9 +21,11 @@ import java.util.function.Consumer;
  */
 public class StudyDto {
     static Scanner sc = new Scanner(System.in);
+    private Integer id;
 
     // lägg till så man kan skriva både stor och lite bokstav utan att det blir fel
     public static void getEnglishQuestions(User user) {
+
         List<StudyQuestion> studyQuestionsEnglish = new ArrayList<>();
         inTransaction((entityManager) -> {
             String queryString = """
@@ -43,10 +47,15 @@ public class StudyDto {
                 if(answer.equals(question.getCorrectAnswer()))
                     score +=1;
             }
-        System.out.println(" Du fick " + score + " poäng");
-        }
 
-        
+        System.out.println(" Du fick " + score + " poäng");
+        Subject english = SubjectDto.getSubject(1);
+        int finalScore = score;
+        inTransaction((entityManager) -> {
+                entityManager.persist(new Score(user, english, finalScore));
+            });
+
+        }
 
 
     static void inTransaction(Consumer<EntityManager> work) {

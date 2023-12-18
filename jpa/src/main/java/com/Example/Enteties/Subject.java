@@ -1,6 +1,9 @@
 package com.Example.Enteties;
 
+import com.Example.JPAUtil;
 import jakarta.persistence.*;
+
+import java.util.function.Consumer;
 
 @Entity
 @Table(name = "subjects", schema = "Grupp1")
@@ -17,6 +20,8 @@ public class Subject {
         return id;
     }
 
+
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -30,3 +35,4 @@ public class Subject {
     }
 
 }
+
