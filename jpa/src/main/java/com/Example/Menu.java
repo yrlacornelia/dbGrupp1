@@ -69,7 +69,6 @@ public class Menu {
     }
 
     public static void thirdMenu(User user){
-        System.out.println(user.getName());
         System.out.println("1. Se ditt highscore");
         System.out.println("2. Öva på glosor");
         System.out.println("3. Logga ut");
@@ -84,7 +83,7 @@ public class Menu {
 
     public static void highScoreMenu(User user) {
         while (true) {
-
+            System.out.println("Välj vilket ämne");
             System.out.println("1: Visa Highscore i Engelska");
             System.out.println("2: Visa Highscore i Geografi");
             System.out.println("3: Visa Highscore i Matematik");
