@@ -66,12 +66,24 @@ public class UserDto {
     }
 
 
-    public static User getStudent(Integer userId) {
-        AtomicReference<User> user = new AtomicReference<>(null);
+    public static User getStudent(Integer userId, int schoolId) {
+        AtomicReference<User> atomicUser = new AtomicReference<>(null);
         inTransaction(entityManager -> {
-            user.set(entityManager.find(User.class, userId));
+            String queryString = """
+                    SELECT u FROM User u where u.id = :userId and u.school.id = :schoolId""";
+            var query = entityManager.createQuery(queryString, User.class);
+            query.setParameter("schoolId", schoolId);
+            query.setParameter("userId", userId);
+            System.out.println(query);
+            List<User> users = query.getResultList();
+            users.forEach(user1 -> System.out.println("Name: " + user1.getName() +  " Id: " + user1.getId() + "School" + user1.getSchool()));
+            if(!users.isEmpty()) {
+                atomicUser.set(entityManager.find(User.class, userId));
+            }
+            else
+                System.out.println("Användaren finns inte");
         });
-        return user.get();
+        return atomicUser.get();
     }
 
 

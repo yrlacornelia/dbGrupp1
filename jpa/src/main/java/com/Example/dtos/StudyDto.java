@@ -31,17 +31,14 @@ public class StudyDto {
                 var query = entityManager.createQuery(queryString, StudyQuestion
                         .class);
                 query.setParameter("subjectId", subjectId);
-                studyQuestions.
-                        addAll(query.getResultList());
-                studyQuestions.forEach(question -> System.out.println(question.getQuestion() +  " Answer: " + question.
-                        getCorrectAnswer()));
+                studyQuestions.addAll(query.getResultList());
             });
         int score = 0;
             for (StudyQuestion question : studyQuestions){
                 System.out.println(question.
                         getQuestion());
                 String answer = sc.nextLine();
-                if(answer.equals(question.getCorrectAnswer()))
+                if(answer.equalsIgnoreCase(question.getCorrectAnswer()))
                     score +=1;
             }
 
@@ -52,9 +49,6 @@ public class StudyDto {
                 entityManager.persist(new Score(user, subject, finalScore));
             });
         }
-
-
-
 
     static void inTransaction(Consumer<EntityManager> work) {
         try (EntityManager entityManager = JPAUtil.getEntityManager()) {

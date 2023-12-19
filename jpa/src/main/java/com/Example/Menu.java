@@ -78,7 +78,7 @@ public class Menu {
         EntityManager em = JPAUtil.getEntityManager();
         System.out.println("Ange ditt studentid:");
         Integer userId = Integer.valueOf(sc.nextLine());
-        User user = UserDto.getStudent(userId);
+        User user = UserDto.getStudent(userId, schoolId);
         if (user != null) {
             System.out.println("Inloggad som: " + user.getName());
             thirdMenu(user);
@@ -90,12 +90,14 @@ public class Menu {
     public static void thirdMenu(User user) {
         System.out.println("1. Se ditt highscore");
         System.out.println("2. Välj ämne att öva på");
-        System.out.println("3. Logga ut");
+        System.out.println("3: Jämför skolornas resultat");
+        System.out.println("4. Logga ut");
         String userSelection = sc.nextLine();
         switch (userSelection) {
             case "1" -> highScoreMenu(user);
             case "2" -> chooseSubject(user);
-            case "3" -> firstMenu();
+            case "3" -> ScoreDto.compareScoreResult();
+            case "4" -> firstMenu();
             default -> {
                 System.out.println("Välj ett giltigt alternativ:");
                 thirdMenu(user);
@@ -108,12 +110,13 @@ public class Menu {
             System.out.println("1: Engelska");
             System.out.println("2: Geografi");
             System.out.println("3: Matte");
+            System.out.println("4. Gå tillbaka");
             String userInput = sc.nextLine();
             int subjectId = Integer.parseInt(userInput);
             StudyDto.getQuestions(user, subjectId);
             thirdMenu(user);
-            if(subjectId != 1 || subjectId != 2)
-                System.out.println("Välj ett värde mellan 1-2");
+            if(subjectId != 1 || subjectId != 2 || subjectId != 3  || subjectId != 4)
+                System.out.println("Välj ett värde mellan 1-4");
         }
     }
 

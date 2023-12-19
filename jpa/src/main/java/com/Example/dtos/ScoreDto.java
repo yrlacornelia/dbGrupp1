@@ -1,5 +1,6 @@
 package com.Example.dtos;
 
+import com.Example.Enteties.School;
 import com.Example.Enteties.Score;
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
@@ -11,11 +12,31 @@ import java.util.function.Consumer;
 
 public class ScoreDto {
 
-    public static void setScore(){
+
+   public static void compareScoreResult(){
+       inTransaction((entityManager) -> {
+           String quertyStringIths = """
+                        
+                   SELECT u FROM Score u where user.school.id = 1
+                        """;
+           var query = entityManager.createQuery(quertyStringIths, Score.class);
+           List<Score> listOfUsersFromITHS = query.getResultList();
+           listOfUsersFromITHS.forEach(user1 -> System.out.println("Score: " + user1.getPoints()));
+           float ithsScore = 0;
+           for(Score i : listOfUsersFromITHS){
+               ithsScore += i.getPoints();
+           }
+           float ithsAverage = ithsScore/listOfUsersFromITHS.size();
 
 
-    }
+           System.out.printf("Genomsnitt för iths = " + "%.1f\n", ithsAverage);
+       
 
+           if(listOfUsersFromITHS.isEmpty()){
+               System.out.println("Inga poäng registrerade\n");
+           }
+       });
+   }
 
     static void inTransaction(Consumer<EntityManager> work) {
         try (EntityManager entityManager = JPAUtil.getEntityManager()) {
@@ -47,14 +68,7 @@ public class ScoreDto {
             if(listOfScores.isEmpty()){
                 System.out.println("Inga poäng registrerade\n");
             }
-
-
         });
     }
 
-    public static void getGeographyHighscore(User user) {
-    }
-
-    public static void getMathHighscore(User user) {
-    }
 }
