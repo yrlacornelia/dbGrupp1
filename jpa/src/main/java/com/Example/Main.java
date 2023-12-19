@@ -7,6 +7,15 @@ import jakarta.persistence.*;
 import java.util.Scanner;
 
 public class Main {
+    //todo
+    // 1. skapa metoder och queries för matte o geografi (använd mallen från engelska)
+    // 2. Skoltabell + entety och dto
+    // 3. Städa ex byta if till switch
+    // 4. Byta mattefrågorna
+    // 5. Timestamp + snygga till + bara highscore
+    // 6. Om vi har mycket tid: skapa frågor
+    // 7. Om vi har mycket tid: Jämföra skolornas resultat
+
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
