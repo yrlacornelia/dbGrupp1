@@ -1,8 +1,8 @@
 package com.Example.dtos;
 
+import com.Example.Enteties.School;
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
-import com.Example.Menu;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -19,15 +19,16 @@ public class UserDto {
 
 
 
-    public static void addNewStudent() {
+    public static void addNewStudent(int schoolId) {
         System.out.println("Välj namn på ny användare:");
         String userName = sc.nextLine();
+        School school = SchoolDto.getSchool(schoolId);
         inTransaction((entityManager) -> {
-            entityManager.persist(new User(userName));
+            entityManager.persist(new User(userName, school));
         });
     }
 
-    public static void showStudent(){
+    public static void showStudent(int schoolId){
         System.out.println("Vill du visa student baserat på id eller namn?");
         System.out.println("1: Namn");
         System.out.println("2: Id");
@@ -51,7 +52,7 @@ public class UserDto {
             inTransaction(entityManager -> {
                 User user = entityManager.find(User.class, userId);
                 if (user != null){
-                    System.out.println("Välkommen " + user.getName());
+                    System.out.println(user.getName() + " hittades");
                 } else{
                     // skapa ny användare
                     System.out.println("Vi kunde inte hitta dig");
@@ -74,18 +75,20 @@ public class UserDto {
     }
 
 
-    public static void getAllStudents(){
+
+    public static void getAllStudents(int schoolId){
         inTransaction((entityManager) -> {
             String queryString = """
-                        SELECT u FROM User u
+                        SELECT u FROM User u where u.school.id = :schoolId
                         """;
             var query = entityManager.createQuery(queryString, User.class);
+            query.setParameter("schoolId", schoolId);
             List<User> user = query.getResultList();
             user.forEach(user1 -> System.out.println("Name: " + user1.getName() +  " Id: " + user1.getId()));
         });}
 
-    public static void removeStudent(){
-        getAllStudents();
+    public static void removeStudent(int schoolId){
+        getAllStudents(schoolId);
         System.out.println("Ange ID som du vill ta bort");
         String id = sc.nextLine();
         inTransaction((entityManager -> {
@@ -97,8 +100,8 @@ public class UserDto {
         }
         ));}
 
-    public static void updateStudent(){
-        getAllStudents();
+    public static void updateStudent(int schoolId){
+        getAllStudents(schoolId);
         System.out.println("Ange ID som du vill uppdatera:");
         String id = sc.nextLine();
         System.out.println("Uppdatera namn:");

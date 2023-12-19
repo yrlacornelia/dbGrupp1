@@ -1,30 +1,23 @@
 package com.Example.Enteties;
 
 import jakarta.persistence.*;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user", schema = "Grupp1")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 120)
     private String name;
 
-    // Default no args constructor
-    public User(){
-    }
-
-    // Constructor for name
-    public User(String name){
-        this.name = name;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schoolId")
+    private School school;
 
     public Integer getId() {
         return id;
@@ -42,25 +35,41 @@ public class User {
         this.name = name;
     }
 
+    public School getSchool() {
+        return school;
+    }
+
+    public void setSchool(School school) {
+        this.school = school;
+    }
+
+    public User(String name, School school) {
+        this.name = name;
+        this.school = school;
+
+    }
+
+    public User (){};
+
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return getId() != null && Objects.equals(getId(), user.getId());
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(school, user.school);
     }
 
     @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    public int hashCode() {
+        return Objects.hash(id, name, school);
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ")";
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", school=" + school +
+                '}';
     }
 }

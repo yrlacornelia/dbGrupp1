@@ -1,6 +1,6 @@
 package com.Example.dtos;
 
-import com.Example.Enteties.Subject;
+import com.Example.Enteties.School;
 import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -8,19 +8,17 @@ import jakarta.persistence.EntityTransaction;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-/**
- * DTO for {@link com.Example.Enteties.Subject}
- */
-public class SubjectDto {
+public class SchoolDto {
 
-    public static Subject getSubject(Integer subjectId) {
-        AtomicReference<Subject> subject = new AtomicReference<>(null);
+    public static School getSchool(int schoolId) {
+            AtomicReference<School> subject = new AtomicReference<>(null);
 
-        inTransaction(entityManager -> {
-            subject.set(entityManager.find(Subject.class, subjectId));
-        });
+            inTransaction(entityManager -> {
+                subject.set(entityManager.find(School.class, schoolId));
+            });
 
-        return subject.get();
+            return subject.get();
+
 
     }
 
@@ -40,4 +38,3 @@ public class SubjectDto {
         }
     }
 }
-

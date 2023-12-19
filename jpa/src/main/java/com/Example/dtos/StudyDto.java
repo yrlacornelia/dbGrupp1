@@ -8,12 +8,9 @@ import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /**
@@ -36,7 +33,7 @@ public class StudyDto {
                 query.setParameter("subjectId", subjectId);
                 studyQuestions.
                         addAll(query.getResultList());
-                studyQuestions.forEach(question -> System.out.println("question: " + question.getQuestion() +  " Answer " + question.
+                studyQuestions.forEach(question -> System.out.println(question.getQuestion() +  " Answer: " + question.
                         getCorrectAnswer()));
             });
         int score = 0;

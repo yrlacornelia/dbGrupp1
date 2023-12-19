@@ -1,9 +1,5 @@
 package com.Example;
 
-import com.Example.Enteties.User;
-import com.Example.dtos.UserDto;
-import jakarta.persistence.*;
-
 import java.util.Scanner;
 
 public class Main {
@@ -16,6 +12,8 @@ public class Main {
     // 7. Om vi har mycket tid: Jämföra skolornas resultat
     // 8. efter glosor kommer man tillbaka till login de vill vi inte
     // 9. tillbaka knappar där det behövs
+    // 10. bara visa elever och uppdatera elever som går i rätt skola
+    // 11. transaction så man kan hämta
 
     static Scanner sc = new Scanner(System.in);
 
@@ -24,7 +22,7 @@ public class Main {
         //Första meny
 
 
-        Menu.secondMenu();
+        Menu.firstMenu();
 
 /*        System.out.print("Enter search term: ");
         Scanner scanner = new Scanner(System.in);
