@@ -102,7 +102,7 @@ public class UserDto {
 
     public static void updateStudent(){
         getAllStudents();
-        System.out.println("Ange ID som du vill uppdatera");
+        System.out.println("Ange ID som du vill uppdatera:");
         String id = sc.nextLine();
         System.out.println("Uppdatera namn:");
         String name = sc.nextLine();
