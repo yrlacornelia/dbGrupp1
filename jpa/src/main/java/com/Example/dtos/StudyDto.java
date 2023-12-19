@@ -24,23 +24,23 @@ public class StudyDto {
     private Integer id;
 
     // lägg till så man kan skriva både stor och lite bokstav utan att det blir fel
-    public static void getEnglishQuestions(User user) {
-
-        List<StudyQuestion> studyQuestionsEnglish = new ArrayList<>();
+    public static void getQuestions(User user, int subjectId) {
+        List<StudyQuestion> studyQuestions = new ArrayList<>();
         inTransaction((entityManager) -> {
             String queryString = """
                         
-                    SELECT u FROM StudyQuestion u where u.subject.id = 1
+                    SELECT u FROM StudyQuestion u where u.subject.id = :subjectId
                         """;
                 var query = entityManager.createQuery(queryString, StudyQuestion
                         .class);
-                studyQuestionsEnglish.
+                query.setParameter("subjectId", subjectId);
+                studyQuestions.
                         addAll(query.getResultList());
-                studyQuestionsEnglish.forEach(question -> System.out.println("question: " + question.getQuestion() +  " Answer " + question.
+                studyQuestions.forEach(question -> System.out.println("question: " + question.getQuestion() +  " Answer " + question.
                         getCorrectAnswer()));
             });
         int score = 0;
-            for (StudyQuestion question : studyQuestionsEnglish){
+            for (StudyQuestion question : studyQuestions){
                 System.out.println(question.
                         getQuestion());
                 String answer = sc.nextLine();
@@ -49,13 +49,14 @@ public class StudyDto {
             }
 
         System.out.println(" Du fick " + score + " poäng");
-        Subject english = SubjectDto.getSubject(1);
+        Subject subject = SubjectDto.getSubject(subjectId);
         int finalScore = score;
         inTransaction((entityManager) -> {
-                entityManager.persist(new Score(user, english, finalScore));
+                entityManager.persist(new Score(user, subject, finalScore));
             });
-
         }
+
+
 
 
     static void inTransaction(Consumer<EntityManager> work) {

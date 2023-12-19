@@ -3,7 +3,6 @@ package com.Example.dtos;
 import com.Example.Enteties.Score;
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
-import com.Example.Menu;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -16,7 +15,6 @@ public class ScoreDto {
 
 
     }
-
 
 
     static void inTransaction(Consumer<EntityManager> work) {
@@ -35,10 +33,9 @@ public class ScoreDto {
         }
     }
 
-    public static void getEnglishHighscores(User user) {
+    public static void getHighscore(User user, int subjectId) {
         inTransaction((entityManager) -> {
             int userId = user.getId();
-            int subjectId = 1;
             String queryString = """
                         SELECT u FROM Score u where u.user.id = :userId and u.subject.id = :subjectId
                         """;

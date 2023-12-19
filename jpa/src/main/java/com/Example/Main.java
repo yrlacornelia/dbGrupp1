@@ -8,19 +8,21 @@ import java.util.Scanner;
 
 public class Main {
     //todo
-    // 1. skapa metoder och queries för matte o geografi (använd mallen från engelska)
     // 2. Skoltabell + entety och dto
     // 3. Städa ex byta if till switch
     // 4. Byta mattefrågorna
     // 5. Timestamp + snygga till + bara highscore
     // 6. Om vi har mycket tid: skapa frågor
     // 7. Om vi har mycket tid: Jämföra skolornas resultat
+    // 8. efter glosor kommer man tillbaka till login de vill vi inte
+    // 9. tillbaka knappar där det behövs
 
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
 
         //Första meny
+
 
         Menu.secondMenu();
 

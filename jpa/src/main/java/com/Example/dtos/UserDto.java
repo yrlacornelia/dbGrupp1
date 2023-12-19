@@ -18,6 +18,7 @@ public class UserDto {
     private String name;
 
 
+
     public static void addNewStudent() {
         System.out.println("Välj namn på ny användare:");
         String userName = sc.nextLine();
@@ -66,15 +67,11 @@ public class UserDto {
 
     public static User getStudent(Integer userId) {
         AtomicReference<User> user = new AtomicReference<>(null);
-
         inTransaction(entityManager -> {
             user.set(entityManager.find(User.class, userId));
         });
-
         return user.get();
-
     }
-
 
 
     public static void getAllStudents(){
@@ -85,8 +82,7 @@ public class UserDto {
             var query = entityManager.createQuery(queryString, User.class);
             List<User> user = query.getResultList();
             user.forEach(user1 -> System.out.println("Name: " + user1.getName() +  " Id: " + user1.getId()));
-        });
-    }
+        });}
 
     public static void removeStudent(){
         getAllStudents();
@@ -99,9 +95,7 @@ public class UserDto {
             else
                 System.out.println("Användare med id: " + id + " finns inte");
         }
-                ));
-        
-    }
+        ));}
 
     public static void updateStudent(){
         getAllStudents();
@@ -116,9 +110,7 @@ public class UserDto {
             else
                 System.out.println("Användare med id: " + id + " finns inte");
         }
-        ));
-
-    }
+        ));}
 
 
     static void inTransaction(Consumer<EntityManager> work) {

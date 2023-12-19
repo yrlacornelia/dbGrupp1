@@ -5,6 +5,7 @@ import com.Example.dtos.ScoreDto;
 import com.Example.dtos.StudyDto;
 import com.Example.dtos.UserDto;
 import jakarta.persistence.EntityManager;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.Scanner;
 
@@ -39,25 +40,22 @@ public class Menu {
             System.out.println("5: Uppdatera en student");
             System.out.println("6: Gå tillbaka till föregående meny");
             String userSelection = sc.nextLine();
-            if (userSelection.equals("1"))
-                UserDto.addNewStudent();
-            if (userSelection.equals("2"))
-                UserDto.showStudent();
-            if (userSelection.equals("3"))
-                UserDto.removeStudent();
-            if (userSelection.equals("4"))
-                UserDto.getAllStudents();
-            if (userSelection.equals("5"))
-                UserDto.updateStudent();
-            if (userSelection.equals("6"))
-                Menu.secondMenu();
+            switch (userSelection) {
+                case "1" -> UserDto.addNewStudent();
+                case "2" -> UserDto.showStudent();
+                case "3" -> UserDto.removeStudent();
+                case "4" -> UserDto.getAllStudents();
+                case "5" -> UserDto.updateStudent();
+                case "6" -> Menu.secondMenu();
+                default -> System.out.println("Välj ett giltigt alternativ:");
+            }
             em.close();
         }
     }
 
     public static void loginMenu(){
         EntityManager em = JPAUtil.getEntityManager();
-        System.out.println("Ange ditt studentid");
+        System.out.println("Ange ditt studentid:");
         Integer userId = Integer.valueOf(sc.nextLine());
         User user = UserDto.getStudent(userId);
         if (user != null) {
@@ -68,41 +66,49 @@ public class Menu {
         }
     }
 
-    public static void thirdMenu(User user){
+    public static void thirdMenu(User user) {
         System.out.println("1. Se ditt highscore");
-        System.out.println("2. Öva på glosor");
+        System.out.println("2. Välj ämne att öva på");
         System.out.println("3. Logga ut");
         String userSelection = sc.nextLine();
-        if(userSelection.equals("1"))
-            highScoreMenu(user);
-        if(userSelection.equals("2"))
-            studyMenu(user);
-        if(userSelection.equals("3"))
-            secondMenu();
+        switch (userSelection) {
+            case "1" -> highScoreMenu(user);
+            case "2" -> chooseSubject(user);
+            case "3" -> secondMenu();
+            default -> {
+                System.out.println("Välj ett giltigt alternativ:");
+                thirdMenu(user);
+            }
+        }
+    }
+
+    public static void chooseSubject(User user){
+        while (true) {
+            System.out.println("1: Engelska");
+            System.out.println("2: Geografi");
+            System.out.println("3: Matte");
+            String userInput = sc.nextLine();
+            int subjectId = Integer.parseInt(userInput);
+            StudyDto.getQuestions(user, subjectId);
+            thirdMenu(user);
+            if(subjectId != 1 || subjectId != 2)
+                System.out.println("Välj ett värde mellan 1-2");
+        }
     }
 
     public static void highScoreMenu(User user) {
         while (true) {
-            System.out.println("Välj vilket ämne");
+            System.out.println("Välj ett ämne:");
             System.out.println("1: Visa Highscore i Engelska");
             System.out.println("2: Visa Highscore i Geografi");
             System.out.println("3: Visa Highscore i Matematik");
             System.out.println("4: Gå tillbaka");
             String userInput = sc.nextLine();
-            if (userInput.equals("1"))
-                ScoreDto.getEnglishHighscores(user);
-            if (userInput.equals("2"))
-                ScoreDto.getGeographyHighscore(user);
-            if (userInput.equals("3"))
-                ScoreDto.getMathHighscore(user);
-            if(userInput.equals("4"))
-                thirdMenu(user);
+            switch (userInput) {
+                case "1", "2", "3" -> ScoreDto.getHighscore(user, Integer.parseInt(userInput));
+                case "4" -> thirdMenu(user);
+                default -> System.out.println("Välj ett giltigt alternativ:");
+            }
         }
     }
-
-    private static void studyMenu(User user) {
-        StudyDto.getEnglishQuestions(user);
-    }
 }
-
-
