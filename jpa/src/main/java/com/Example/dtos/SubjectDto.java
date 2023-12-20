@@ -16,28 +16,12 @@ public class SubjectDto {
     public static Subject getSubject(Integer subjectId) {
         AtomicReference<Subject> subject = new AtomicReference<>(null);
 
-        inTransaction(entityManager -> {
+        InTransactionMethod.inTransaction(entityManager -> {
             subject.set(entityManager.find(Subject.class, subjectId));
         });
 
         return subject.get();
 
-    }
-
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
     }
 }
 

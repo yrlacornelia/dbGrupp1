@@ -25,14 +25,10 @@ public class Menu {
             System.out.println("2: Chalmers");
             String input = sc.nextLine();
             int schoolId = 0;
-            if (input.equals("1")) {
-                schoolId = Integer.parseInt(input);
-                secondMenu(schoolId);
-            } else if (input.equals("2")){
-                schoolId = Integer.parseInt(input);
-                secondMenu(schoolId);
-            } else {
-                System.out.println("Välj ett alternativ mellan 1-2");
+            schoolId = Integer.parseInt(input);
+            switch (schoolId) {
+                case 1, 2 -> secondMenu(schoolId);
+                default -> System.out.println("Välj ett alternativ mellan 1-2");
             }
         }
     }
@@ -44,14 +40,12 @@ public class Menu {
             System.out.println("2. Gå till adminsidan");
             System.out.println("3. Gå tillbaka");
             String userSelection = sc.nextLine();
-            if (userSelection.equals("1")) {
-                loginMenu(schoolId);
-            }else if (userSelection.equals("2")) {
-                adminMenu(schoolId);
-            } else if(userSelection.equals("3"))
-                Menu.firstMenu();
-            else {
-                System.out.println("Välj 1 eller 2");
+            switch(userSelection){
+                case "1" -> loginMenu(schoolId);
+                case "2" -> adminMenu(schoolId);
+                case "3" -> Menu.firstMenu();
+                default -> System.out.println("Välj 1 eller 2");
+
             }
         }
     }
@@ -103,16 +97,7 @@ public class Menu {
         switch (userSelection) {
             case "1" -> highScoreMenu(user);
             case "2" -> chooseSubject(user);
-            case "3" -> {
-                inTransaction((entityManager) -> {
-                    String queryString = """
-                            SELECT u FROM School u
-                        """;
-                    var query = entityManager.createQuery(queryString, School.class);
-                    List<School> listOfSchools = query.getResultList();
-                    listOfSchools.forEach(school -> ScoreDto.compareScoreResult(school.getId(), school.getName()));
-                });
-            }
+            case "3" -> SchoolDto.getSchoolHighscore();
             case "4" -> firstMenu();
             default -> System.out.println("Välj ett giltigt alternativ:");
             }
@@ -147,21 +132,6 @@ public class Menu {
                 case "1", "2", "3" -> ScoreDto.getHighscore(user, Integer.parseInt(userInput));
                 case "4" -> thirdMenu(user);
                 default -> System.out.println("Välj ett giltigt alternativ:");
-            }
-        }
-    }
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
             }
         }
     }

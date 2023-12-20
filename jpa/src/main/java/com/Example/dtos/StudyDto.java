@@ -21,7 +21,7 @@ public class StudyDto {
 
     public static void getQuestions(User user, int subjectId) {
         List<StudyQuestion> studyQuestions = new ArrayList<>();
-        inTransaction((entityManager) -> {
+        InTransactionMethod.inTransaction((entityManager) -> {
             String queryString = """
                         
                     SELECT u FROM StudyQuestion u where u.subject.id = :subjectId
@@ -43,24 +43,10 @@ public class StudyDto {
         System.out.println(" Du fick " + score + " poäng");
         Subject subject = SubjectDto.getSubject(subjectId);
         int finalScore = score;
-        inTransaction((entityManager) -> {
+        InTransactionMethod.inTransaction((entityManager) -> {
                 entityManager.persist(new Score(user, subject, finalScore));
             });
         }
 
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-    }
+
 }
