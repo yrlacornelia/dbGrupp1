@@ -1,6 +1,11 @@
 package com.Example.Enteties;
 
 import jakarta.persistence.*;
+import jdk.jfr.Timestamp;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "score", schema = "Grupp1")
@@ -21,6 +26,8 @@ public class Score {
     @Column(name = "points")
     private Integer points;
 
+
+
     public Score(){
 
     }
@@ -30,6 +37,7 @@ public class Score {
         this.subject = subject;
         this.points = points;
     }
+
 
     public Integer getId() {
         return id;

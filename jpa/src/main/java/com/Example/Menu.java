@@ -1,12 +1,18 @@
 package com.Example;
 
+import com.Example.Enteties.School;
+import com.Example.Enteties.Score;
 import com.Example.Enteties.User;
+import com.Example.dtos.SchoolDto;
 import com.Example.dtos.ScoreDto;
 import com.Example.dtos.StudyDto;
 import com.Example.dtos.UserDto;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
+import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class Menu {
 
@@ -97,7 +103,16 @@ public class Menu {
         switch (userSelection) {
             case "1" -> highScoreMenu(user);
             case "2" -> chooseSubject(user);
-            case "3" -> ScoreDto.compareScoreResult();
+            case "3" -> {
+                inTransaction((entityManager) -> {
+                    String queryString = """
+                            SELECT u FROM School u
+                        """;
+                    var query = entityManager.createQuery(queryString, School.class);
+                    List<School> listOfSchools = query.getResultList();
+                    listOfSchools.forEach(school -> ScoreDto.compareScoreResult(school.getId(), school.getName()));
+                });
+            }
             case "4" -> firstMenu();
             default -> System.out.println("Välj ett giltigt alternativ:");
             }
@@ -112,10 +127,11 @@ public class Menu {
             System.out.println("4. Gå tillbaka");
             String userInput = sc.nextLine();
             int subjectId = Integer.parseInt(userInput);
-            StudyDto.getQuestions(user, subjectId);
-            thirdMenu(user);
-            if(subjectId != 1 || subjectId != 2 || subjectId != 3  || subjectId != 4)
-                System.out.println("Välj ett värde mellan 1-4");
+            switch (subjectId){
+                case 1,2,3 ->  StudyDto.getQuestions(user, subjectId);
+                case 4 -> thirdMenu(user);
+                default -> System.out.println("Välj ett värde mellan 1-4");
+            }
         }
     }
 
@@ -131,6 +147,21 @@ public class Menu {
                 case "1", "2", "3" -> ScoreDto.getHighscore(user, Integer.parseInt(userInput));
                 case "4" -> thirdMenu(user);
                 default -> System.out.println("Välj ett giltigt alternativ:");
+            }
+        }
+    }
+    static void inTransaction(Consumer<EntityManager> work) {
+        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
+            EntityTransaction transaction = entityManager.getTransaction();
+            try {
+                transaction.begin();
+                work.accept(entityManager);
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction.isActive()) {
+                    transaction.rollback();
+                }
+                throw e;
             }
         }
     }

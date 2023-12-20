@@ -45,7 +45,6 @@ public class UserDto {
                 List<User> user = query.getResultList();
                 user.forEach(user1 -> System.out.println("Name: " + user1.getName() + " \n Id: " + user1.getId()));
             });
-            // sök med via namn
         } else if (userChoice.equals("2")) {
             System.out.println("Skriv in id:");
             String userId = sc.nextLine();
@@ -59,7 +58,6 @@ public class UserDto {
                     System.out.println("Vänligen ange ditt namn:");
                 }
             });
-            // sök via id
         } else{
             System.out.println("Du måste välja alternativ 1 eller 2");
         }
@@ -74,9 +72,7 @@ public class UserDto {
             var query = entityManager.createQuery(queryString, User.class);
             query.setParameter("schoolId", schoolId);
             query.setParameter("userId", userId);
-            System.out.println(query);
             List<User> users = query.getResultList();
-            users.forEach(user1 -> System.out.println("Name: " + user1.getName() +  " Id: " + user1.getId() + "School" + user1.getSchool()));
             if(!users.isEmpty()) {
                 atomicUser.set(entityManager.find(User.class, userId));
             }

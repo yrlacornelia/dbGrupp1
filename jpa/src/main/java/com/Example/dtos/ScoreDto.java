@@ -13,32 +13,16 @@ import java.util.function.Consumer;
 public class ScoreDto {
 
 
-   public static void compareScoreResult(){
+   public static void compareScoreResult(int id, String schoolName){
        inTransaction((entityManager) -> {
            String quertyStringIths = """
                         
-                    SELECT AVG(u.points) FROM Score u where user.school.id = 2
+                    SELECT AVG(u.points) FROM Score u where user.school.id = :id
                         """;
            var query = entityManager.createQuery(quertyStringIths, Double.class);
-
+           query.setParameter("id", id);
            List<Double> listOfUsersFromITHS = query.getResultList();
-           listOfUsersFromITHS.forEach(average -> System.out.println("Average: " +  average));
-           System.out.println();
-
-
-        /*   float ithsScore = 0;
-           for(Score i : listOfUsersFromITHS){
-               ithsScore += i.getPoints();
-           }
-           float ithsAverage = ithsScore/listOfUsersFromITHS.size();
-
-
-           System.out.printf("Genomsnitt för iths = " + "%.1f\n", ithsAverage);
-
-
-           if(listOfUsersFromITHS.isEmpty()){
-               System.out.println("Inga poäng registrerade\n");
-           } */
+           listOfUsersFromITHS.forEach(average -> System.out.println(schoolName + " Average: " +  average));
        });
    }
 
