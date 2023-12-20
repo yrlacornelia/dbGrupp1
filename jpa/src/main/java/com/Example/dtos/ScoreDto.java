@@ -17,12 +17,16 @@ public class ScoreDto {
        inTransaction((entityManager) -> {
            String quertyStringIths = """
                         
-                   SELECT u FROM Score u where user.school.id = 1
+                    SELECT AVG(u.points) FROM Score u where user.school.id = 2
                         """;
-           var query = entityManager.createQuery(quertyStringIths, Score.class);
-           List<Score> listOfUsersFromITHS = query.getResultList();
-           listOfUsersFromITHS.forEach(user1 -> System.out.println("Score: " + user1.getPoints()));
-           float ithsScore = 0;
+           var query = entityManager.createQuery(quertyStringIths, Double.class);
+
+           List<Double> listOfUsersFromITHS = query.getResultList();
+           listOfUsersFromITHS.forEach(average -> System.out.println("Average: " +  average));
+           System.out.println();
+
+
+        /*   float ithsScore = 0;
            for(Score i : listOfUsersFromITHS){
                ithsScore += i.getPoints();
            }
@@ -30,11 +34,11 @@ public class ScoreDto {
 
 
            System.out.printf("Genomsnitt för iths = " + "%.1f\n", ithsAverage);
-       
+
 
            if(listOfUsersFromITHS.isEmpty()){
                System.out.println("Inga poäng registrerade\n");
-           }
+           } */
        });
    }
 
@@ -70,5 +74,4 @@ public class ScoreDto {
             }
         });
     }
-
 }

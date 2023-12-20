@@ -88,6 +88,7 @@ public class Menu {
     }
 
     public static void thirdMenu(User user) {
+        while (true) {
         System.out.println("1. Se ditt highscore");
         System.out.println("2. Välj ämne att öva på");
         System.out.println("3: Jämför skolornas resultat");
@@ -98,9 +99,7 @@ public class Menu {
             case "2" -> chooseSubject(user);
             case "3" -> ScoreDto.compareScoreResult();
             case "4" -> firstMenu();
-            default -> {
-                System.out.println("Välj ett giltigt alternativ:");
-                thirdMenu(user);
+            default -> System.out.println("Välj ett giltigt alternativ:");
             }
         }
     }

@@ -18,9 +18,7 @@ import java.util.function.Consumer;
  */
 public class StudyDto {
     static Scanner sc = new Scanner(System.in);
-    private Integer id;
 
-    // lägg till så man kan skriva både stor och lite bokstav utan att det blir fel
     public static void getQuestions(User user, int subjectId) {
         List<StudyQuestion> studyQuestions = new ArrayList<>();
         inTransaction((entityManager) -> {
