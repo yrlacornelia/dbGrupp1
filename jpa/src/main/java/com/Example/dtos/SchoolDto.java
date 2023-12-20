@@ -5,15 +5,26 @@ import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class SchoolDto {
-
+    
+    public static void getSchoolHighscore() {
+       InTransactionMethod.inTransaction((entityManager) -> {
+            String queryString = """
+                            SELECT u FROM School u
+                        """;
+            var query = entityManager.createQuery(queryString, School.class);
+            List<School> listOfSchools = query.getResultList();
+            listOfSchools.forEach(school -> ScoreDto.compareScoreResult(school.getId(), school.getName()));
+        });
+    }
     public static School getSchool(int schoolId) {
             AtomicReference<School> subject = new AtomicReference<>(null);
 
-            inTransaction(entityManager -> {
+           InTransactionMethod.inTransaction(entityManager -> {
                 subject.set(entityManager.find(School.class, schoolId));
             });
 
@@ -22,19 +33,5 @@ public class SchoolDto {
 
     }
 
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-    }
+
 }

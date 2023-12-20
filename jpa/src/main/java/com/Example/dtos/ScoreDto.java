@@ -12,36 +12,22 @@ public class ScoreDto {
 
 
    public static void compareScoreResult(int id, String schoolName){
-       inTransaction((entityManager) -> {
-           String quertyStringIths = """
+       InTransactionMethod.inTransaction((entityManager) -> {
+           String queryStringIths = """
                         
                     SELECT AVG(u.points) FROM Score u where user.school.id = :id
                         """;
-           var query = entityManager.createQuery(quertyStringIths, Double.class);
+           var query = entityManager.createQuery(queryStringIths, Double.class);
            query.setParameter("id", id);
            List<Double> listOfUsersFromITHS = query.getResultList();
            listOfUsersFromITHS.forEach(average -> System.out.println(schoolName + " Medelvärde: " +  average));
        });
    }
 
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-    }
+
 
     public static void getHighscore(User user, int subjectId) {
-        inTransaction((entityManager) -> {
+        InTransactionMethod.inTransaction((entityManager) -> {
             int userId = user.getId();
             String queryString = """
                         SELECT u FROM Score u where u.user.id = :userId and u.subject.id = :subjectId

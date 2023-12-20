@@ -23,7 +23,7 @@ public class UserDto {
         System.out.println("Välj namn på ny användare:");
         String userName = sc.nextLine();
         School school = SchoolDto.getSchool(schoolId);
-        inTransaction((entityManager) -> {
+        InTransactionMethod.inTransaction((entityManager) -> {
             entityManager.persist(new User(userName, school));
         });
     }
@@ -36,7 +36,7 @@ public class UserDto {
         if(userChoice.equals("1")){
             System.out.println("Skriv namn");
             String name = sc.nextLine();
-            inTransaction((entityManager) -> {
+            InTransactionMethod.inTransaction((entityManager) -> {
                 String queryString = """
                         SELECT u FROM User u where u.name = :name
                         """;
@@ -48,7 +48,7 @@ public class UserDto {
         } else if (userChoice.equals("2")) {
             System.out.println("Skriv in id:");
             String userId = sc.nextLine();
-            inTransaction(entityManager -> {
+            InTransactionMethod.inTransaction(entityManager -> {
                 User user = entityManager.find(User.class, userId);
                 if (user != null){
                     System.out.println(user.getName() + " hittades");
@@ -66,7 +66,7 @@ public class UserDto {
 
     public static User getStudent(Integer userId, int schoolId) {
         AtomicReference<User> atomicUser = new AtomicReference<>(null);
-        inTransaction(entityManager -> {
+        InTransactionMethod.inTransaction(entityManager -> {
             String queryString = """
                     SELECT u FROM User u where u.id = :userId and u.school.id = :schoolId""";
             var query = entityManager.createQuery(queryString, User.class);
@@ -85,7 +85,7 @@ public class UserDto {
 
 
     public static void getAllStudents(int schoolId){
-        inTransaction((entityManager) -> {
+        InTransactionMethod.inTransaction((entityManager) -> {
             String queryString = """
                         SELECT u FROM User u where u.school.id = :schoolId
                         """;
@@ -99,7 +99,7 @@ public class UserDto {
         getAllStudents(schoolId);
         System.out.println("Ange ID som du vill ta bort");
         String id = sc.nextLine();
-        inTransaction((entityManager -> {
+        InTransactionMethod.inTransaction((entityManager -> {
             User user = entityManager.find(User.class, id);
             if(user != null)
                 entityManager.remove(user);
@@ -114,7 +114,7 @@ public class UserDto {
         String id = sc.nextLine();
         System.out.println("Uppdatera namn:");
         String name = sc.nextLine();
-        inTransaction((entityManager -> {
+        InTransactionMethod.inTransaction((entityManager -> {
             User user = entityManager.find(User.class, id);
             if(user != null)
                 user.setName(name);
@@ -124,19 +124,5 @@ public class UserDto {
         ));}
 
 
-    static void inTransaction(Consumer<EntityManager> work) {
-        try (EntityManager entityManager = JPAUtil.getEntityManager()) {
-            EntityTransaction transaction = entityManager.getTransaction();
-            try {
-                transaction.begin();
-                work.accept(entityManager);
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction.isActive()) {
-                    transaction.rollback();
-                }
-                throw e;
-            }
-        }
-    }
+
 }
