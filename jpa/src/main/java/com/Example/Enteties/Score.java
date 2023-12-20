@@ -1,11 +1,7 @@
 package com.Example.Enteties;
-
 import jakarta.persistence.*;
-import jdk.jfr.Timestamp;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "score", schema = "Grupp1")
@@ -26,6 +22,9 @@ public class Score {
     @Column(name = "points")
     private Integer points;
 
+    @Column(name = "createdAt")
+    @CreationTimestamp
+    private LocalDate createdAt;
 
 
     public Score(){
@@ -38,6 +37,14 @@ public class Score {
         this.points = points;
     }
 
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Integer getId() {
         return id;

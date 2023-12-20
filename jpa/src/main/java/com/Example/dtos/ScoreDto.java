@@ -1,12 +1,10 @@
 package com.Example.dtos;
-
 import com.Example.Enteties.School;
 import com.Example.Enteties.Score;
 import com.Example.Enteties.User;
 import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -22,7 +20,7 @@ public class ScoreDto {
            var query = entityManager.createQuery(quertyStringIths, Double.class);
            query.setParameter("id", id);
            List<Double> listOfUsersFromITHS = query.getResultList();
-           listOfUsersFromITHS.forEach(average -> System.out.println(schoolName + " Average: " +  average));
+           listOfUsersFromITHS.forEach(average -> System.out.println(schoolName + " Medelvärde: " +  average));
        });
    }
 
@@ -52,7 +50,7 @@ public class ScoreDto {
             query.setParameter("subjectId", subjectId);
             query.setParameter("userId", userId);
             List<Score> listOfScores = query.getResultList();
-            listOfScores.forEach(user1 -> System.out.println("Score: " + user1.getPoints()));
+            listOfScores.forEach(score -> System.out.println("Poäng: " + score.getPoints() + " Datum: " + score.getCreatedAt()));
             if(listOfScores.isEmpty()){
                 System.out.println("Inga poäng registrerade\n");
             }
