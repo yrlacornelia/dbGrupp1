@@ -18,18 +18,33 @@ public class Menu {
 
     public static Scanner sc = new Scanner(System.in);
 
+    public static void zeroPointFiveMenu(){
+        while (true){
+            System.out.println("1: Välja skola");
+            System.out.println("2: Lägg till skola");
+            String input = sc.nextLine();
+            switch (input) {
+                case "1" -> firstMenu();
+                case "2" -> SchoolDto.createSchool();
+                default -> System.out.print("Välj mellan alternativ 1 eller 2");
+            }
+        }
+    }
+
     public static void firstMenu(){
         while (true) {
-            System.out.println("Välj skola");
-            System.out.println("1: IT-Högskolan");
-            System.out.println("2: Chalmers");
+            System.out.println("Välj skola:");
+            SchoolDto.getAllSchools();
+            System.out.println("0: Gå tillbaka");
             String input = sc.nextLine();
             int schoolId = 0;
             schoolId = Integer.parseInt(input);
-            switch (schoolId) {
-                case 1, 2 -> secondMenu(schoolId);
-                default -> System.out.println("Välj ett alternativ mellan 1-2");
-            }
+            if(schoolId == 0)
+                zeroPointFiveMenu();
+            else if(SchoolDto.getSchool(schoolId) != null)
+                secondMenu(schoolId);
+            else
+                System.out.println("Välj skola med giltigt id");
         }
     }
 
