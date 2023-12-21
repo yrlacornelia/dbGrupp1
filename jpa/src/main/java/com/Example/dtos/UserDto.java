@@ -101,8 +101,10 @@ public class UserDto {
         String id = sc.nextLine();
         InTransactionMethod.inTransaction((entityManager -> {
             User user = entityManager.find(User.class, id);
-            if(user != null)
+            if(user != null) {
+                ScoreDto.deleteScoreByUser(user);
                 entityManager.remove(user);
+            }
             else
                 System.out.println("Användare med id: " + id + " finns inte");
         }

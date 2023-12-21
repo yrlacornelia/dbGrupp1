@@ -5,6 +5,8 @@ import com.Example.Enteties.User;
 import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -42,4 +44,17 @@ public class ScoreDto {
             }
         });
     }
+
+
+    public static void deleteScoreByUser(User user) {
+        InTransactionMethod.inTransaction((entityManager) -> {
+            int userId = user.getId();
+            String hql = "DELETE FROM Score WHERE user.id = :userId";
+            Query query = (Query) entityManager.createQuery(hql);
+            query.setParameter("userId", userId);
+            query.executeUpdate();
+        });
+    }
+
+
 }
