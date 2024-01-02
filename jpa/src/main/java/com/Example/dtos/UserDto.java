@@ -1,31 +1,20 @@
 package com.Example.dtos;
-
 import com.Example.Enteties.School;
 import com.Example.Enteties.User;
-import com.Example.JPAUtil;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 public class UserDto {
 
     static Scanner sc = new Scanner(System.in);
-    private static Integer id;
-    private String name;
-
 
 
     public static void addNewStudent(int schoolId) {
         System.out.println("Välj namn på ny användare:");
         String userName = sc.nextLine();
         School school = SchoolDto.getSchool(schoolId);
-        InTransactionMethod.inTransaction((entityManager) -> {
-            entityManager.persist(new User(userName, school));
-        });
+        InTransactionMethod.inTransaction((entityManager) -> entityManager.persist(new User(userName, school)));
     }
 
     public static void showStudent(int schoolId){

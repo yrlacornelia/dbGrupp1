@@ -1,18 +1,11 @@
 package com.Example;
-
-import com.Example.Enteties.School;
-import com.Example.Enteties.Score;
 import com.Example.Enteties.User;
 import com.Example.dtos.SchoolDto;
 import com.Example.dtos.ScoreDto;
 import com.Example.dtos.StudyDto;
 import com.Example.dtos.UserDto;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-
-import java.util.List;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 public class Menu {
 
@@ -37,7 +30,7 @@ public class Menu {
             SchoolDto.getAllSchools();
             System.out.println("0: Gå tillbaka");
             String input = sc.nextLine();
-            int schoolId = 0;
+            int schoolId;
             schoolId = Integer.parseInt(input);
             if(schoolId == 0)
                 chooseOrAddSchoolMenu();
@@ -90,7 +83,6 @@ public class Menu {
     }
 
     public static void loginMenu(int schoolId){
-        EntityManager em = JPAUtil.getEntityManager();
         System.out.println("Ange ditt studentid:");
         Integer userId = Integer.valueOf(sc.nextLine());
         User user = UserDto.getStudent(userId, schoolId);

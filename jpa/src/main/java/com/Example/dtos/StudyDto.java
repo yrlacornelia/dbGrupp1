@@ -4,14 +4,9 @@ import com.Example.Enteties.Score;
 import com.Example.Enteties.StudyQuestion;
 import com.Example.Enteties.Subject;
 import com.Example.Enteties.User;
-import com.Example.JPAUtil;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 /**
  * DTO for {@link com.Example.Enteties.StudyQuestion}
@@ -43,9 +38,7 @@ public class StudyDto {
         System.out.println(" Du fick " + score + " poäng");
         Subject subject = SubjectDto.getSubject(subjectId);
         int finalScore = score;
-        InTransactionMethod.inTransaction((entityManager) -> {
-                entityManager.persist(new Score(user, subject, finalScore));
-            });
+        InTransactionMethod.inTransaction((entityManager) -> entityManager.persist(new Score(user, subject, finalScore)));
         }
 
 

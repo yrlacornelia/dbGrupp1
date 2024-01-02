@@ -1,9 +1,6 @@
 package com.Example.Enteties;
-
-import com.Example.JPAUtil;
 import jakarta.persistence.*;
 
-import java.util.function.Consumer;
 
 @Entity
 @Table(name = "subjects", schema = "Grupp1")

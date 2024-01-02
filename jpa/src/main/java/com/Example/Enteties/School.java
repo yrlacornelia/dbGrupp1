@@ -13,7 +13,7 @@ public class School {
     @Column(name = "name", length = 120)
     private String name;
 
-    public School(){};
+    public School(){}
 
     public School(String name){
         this.name = name;

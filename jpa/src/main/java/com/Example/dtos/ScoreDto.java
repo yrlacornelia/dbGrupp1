@@ -1,14 +1,8 @@
 package com.Example.dtos;
-import com.Example.Enteties.School;
 import com.Example.Enteties.Score;
 import com.Example.Enteties.User;
-import com.Example.JPAUtil;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
 import org.hibernate.query.Query;
-
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ScoreDto {
 

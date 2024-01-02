@@ -1,9 +1,7 @@
 package com.Example.dtos;
-
 import com.Example.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-
 import java.util.function.Consumer;
 
 public class InTransactionMethod {

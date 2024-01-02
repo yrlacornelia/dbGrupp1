@@ -49,7 +49,7 @@ public class User {
 
     }
 
-    public User (){};
+    public User (){}
 
     @Override
     public boolean equals(Object o) {
